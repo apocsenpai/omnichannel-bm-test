@@ -1,20 +1,33 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
+import { HttpService } from '@nestjs/axios';
+import { AxiosResponse } from 'axios';
+import { ViaCep } from './interfaces/viaCep.interface';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UsersRepository) {}
+  constructor(
+    private readonly userRepository: UsersRepository,
+    private readonly httpService: HttpService,
+  ) {}
 
   async create(data: CreateUserDto) {
     const birthdayIso = new Date(data.birthday);
 
     this.throwIfUserIsNotAdult(birthdayIso);
 
+    await this.throwIfCepIsNotValid(data.address.zipCode);
+
     const createBody = {
       ...data,
-      birthday: new Date(birthdayIso),
+      birthday: birthdayIso,
       password: this.encryptPassword(data.password),
     };
 
@@ -38,5 +51,16 @@ export class UsersService {
     const todayInTimestamp = new Date().getTime();
 
     return todayInTimestamp - birthday.getTime() >= eighteenYearsInMilliseconds;
+  }
+
+  async throwIfCepIsNotValid(zipCode: string) {
+    const data = (
+      await this.httpService.axiosRef.get(
+        `https://viacep.com.br/ws/${zipCode}/json/`,
+      )
+    ).data as ViaCep;
+
+    if (data.erro)
+      throw new NotFoundException('O CEP inserido não foi encontrado!');
   }
 }
