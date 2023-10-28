@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int   @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Profile   Profile?
+
+  @@map("users")
+}
+
+model Profile {
+  id        Int    @id @default(autoincrement())
+  name      String
+  cpf       String    @unique @db.VarChar(11)
+  birthday  DateTime  @db.Date
+  gender    Gender
+  addresses Address[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int    @unique
+
+  @@map("profiles")
+}
+
+model Address {
+  id             Int       @id @default(autoincrement())
+  street         String       @db.VarChar(50)
+  number         String       @db.VarChar(6)
+  complement     String?      @db.VarChar(50)
+  zipCode        String       @db.VarChar(8)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())
+  profile        Profile      @relation(fields: [profileId], references: [id])
+  profileId      Int
+  neighborhood   Neighborhood @relation(fields: [neighborhoodId], references: [id])
+  neighborhoodId Int
+
+  @@map("addresses")
+}
+
+model Neighborhood {
+  id        Int    @id @default(autoincrement())
+  name      String    @db.VarChar(50)
+  createdAt DateTime  @default(now())
+  addresses Address[]
+  city      City      @relation(fields: [cityId], references: [id])
+  cityId    Int
+
+  @@map("neighborhoods")
+}
+
+model City {
+  id            Int         @id @default(autoincrement())
+  name          String         @db.VarChar(50)
+  createdAt     DateTime       @default(now())
+  neighborhoods Neighborhood[]
+  state         State          @relation(fields: [stateId], references: [id])
+  stateId       Int
+
+  @@map("cities")
+}
+
+model State {
+  id        Int   @id @default(autoincrement())
+  name      String   @db.VarChar(50)
+  createdAt DateTime @default(now())
+  cities    City[]
+
+  @@map("states")
+}
+
+enum Gender {
+  M
+  F
+  NB
+  OT
+  NI
+}
