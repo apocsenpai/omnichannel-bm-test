@@ -12,7 +12,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { CreateAddressDto } from './create-address.dto';
+import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
 
 export class CreateUserDto {
   @IsString()

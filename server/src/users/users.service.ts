@@ -1,28 +1,24 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
-import { HttpService } from '@nestjs/axios';
-import { ViaCep } from './interfaces/viaCep.interface';
+import { AddressesService } from 'src/addresses/addresses.service';
+import { ProfilesService } from 'src/profiles/profiles.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly userRepository: UsersRepository,
-    private readonly httpService: HttpService,
+    private readonly addressService: AddressesService,
+    private readonly profileService: ProfilesService,
   ) {}
 
   async create(data: CreateUserDto) {
     const birthdayIso = new Date(data.birthday);
 
-    this.throwIfUserIsNotAdult(birthdayIso);
+    this.profileService.throwIfUserIsNotAdult(birthdayIso);
 
-    await this.throwIfCepIsNotValid(data.address.zipCode);
+    await this.addressService.throwIfCepIsNotValid(data.address.zipCode);
 
     await this.throwIfUserAlreadyExists({
       cpf: data.cpf,
@@ -41,32 +37,6 @@ export class UsersService {
 
   encryptPassword(password: string) {
     return bcrypt.hashSync(password, 10);
-  }
-
-  throwIfUserIsNotAdult(birthday: Date) {
-    if (!this.isAdult(birthday))
-      throw new UnprocessableEntityException(
-        'Proibido para menores de 18 anos.',
-      );
-  }
-
-  isAdult(birthday: Date) {
-    const eighteenYearsInMilliseconds = 18 * 365 * 24 * 60 * 60 * 1000;
-
-    const todayInTimestamp = new Date().getTime();
-
-    return todayInTimestamp - birthday.getTime() >= eighteenYearsInMilliseconds;
-  }
-
-  async throwIfCepIsNotValid(zipCode: string) {
-    const data = (
-      await this.httpService.axiosRef.get(
-        `https://viacep.com.br/ws/${zipCode}/json/`,
-      )
-    ).data as ViaCep;
-
-    if (data.erro)
-      throw new NotFoundException('O CEP inserido não foi encontrado!');
   }
 
   async throwIfUserAlreadyExists(data: {
