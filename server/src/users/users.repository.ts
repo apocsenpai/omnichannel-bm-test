@@ -48,4 +48,18 @@ export class UsersRepository {
       },
     });
   }
+
+  async findByCredentials({
+    cpf,
+    email,
+    username,
+  }: {
+    cpf: string;
+    email: string;
+    username: string;
+  }) {
+    return await this.prisma.user.findFirst({
+      where: { OR: [{ email }, { username }, { Profile: { cpf } }] },
+    });
+  }
 }

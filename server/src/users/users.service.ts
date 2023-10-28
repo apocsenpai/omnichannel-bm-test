@@ -8,7 +8,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { HttpService } from '@nestjs/axios';
-import { AxiosResponse } from 'axios';
 import { ViaCep } from './interfaces/viaCep.interface';
 
 @Injectable()
@@ -24,6 +23,12 @@ export class UsersService {
     this.throwIfUserIsNotAdult(birthdayIso);
 
     await this.throwIfCepIsNotValid(data.address.zipCode);
+
+    await this.throwIfUserAlreadyExists({
+      cpf: data.cpf,
+      email: data.email,
+      username: data.username,
+    });
 
     const createBody = {
       ...data,
@@ -62,5 +67,16 @@ export class UsersService {
 
     if (data.erro)
       throw new NotFoundException('O CEP inserido não foi encontrado!');
+  }
+
+  async throwIfUserAlreadyExists(data: {
+    cpf: string;
+    email: string;
+    username: string;
+  }) {
+    const user = await this.userRepository.findByCredentials(data);
+
+    if (user)
+      throw new ConflictException('Usuário já cadastrado na plataforma!');
   }
 }
