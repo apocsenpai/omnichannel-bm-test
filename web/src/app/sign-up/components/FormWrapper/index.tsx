@@ -10,6 +10,7 @@ import AddressInput from './AddressInput'
 import { handleFormErrors } from '@/helpers/handleFormErrors'
 import {
 	formatAddressData,
+	formatForm,
 	formatProfileData,
 	formatUserData,
 } from '@/helpers/formatters'
@@ -154,8 +155,8 @@ export default function FormWrapper() {
 		handleAddressData()
 
 		try {
-			await createUser(formData)
-			
+			await createUser(formatForm(formData))
+
 			redirect('/sign-up/success')
 		} catch (error: any) {
 			console.log(error)
