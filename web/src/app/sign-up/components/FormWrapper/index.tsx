@@ -8,7 +8,11 @@ import Button from '@/components/Button'
 import { FormInputData } from '@/interfaces/form'
 import AddressInput from './AddressInput'
 import { handleFormErrors } from '@/helpers/handleFormErrors'
-import { formatUserData } from '@/helpers/formatters'
+import { formatAddressData, formatProfileData, formatUserData } from '@/helpers/formatters'
+import normalize from '@/utils/validators/normalizeMasks'
+import { getCep } from '@/services/cepApi'
+import { ERROR_MESSAGES } from '@/utils/constants/errorsMessages'
+import { ViaCep } from '@/interfaces/viaCep'
 
 export default function FormWrapper() {
 	const [step, setStep] = useState<number>(1)
@@ -22,6 +26,7 @@ export default function FormWrapper() {
 		cpf: '',
 		birthday: '',
 		gender: '',
+		phone: '',
 		address: {
 			zipCode: '',
 			street: '',
@@ -33,18 +38,27 @@ export default function FormWrapper() {
 		},
 	})
 
-	console.log(formData)
-
-	const [formErrors, setFormErrors] = useState<{ [key: string]: string } >()
+	const [formErrors, setFormErrors] = useState<{ [key: string]: string }>()
 
 	const goToNextFormStep = () => setStep(step === 3 ? step : step + 1)
 
 	const backPreviousFormStep = () => setStep(step === 1 ? step : step - 1)
 
+	const handleSelectOnChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		setFormData({ ...formData, gender: e.target.value })
+		setFormErrors({ ...formErrors, [e.target.name]: '' })
+	}
+
 	const handleOnChangeEvent = (e: ChangeEvent<HTMLInputElement>) => {
-		const inputValue = { [e.target.name]: e.target.value }
+		const mask = normalize[e.target.name]
+
+		const inputValue = {
+			[e.target.name]: mask ? mask(e.target.value) : e.target.value,
+		}
 
 		const isAddressValue = formData.address[e.target.name] !== undefined
+
+		setFormErrors({ ...formErrors, [e.target.name]: '' })
 
 		if (isAddressValue)
 			return setFormData({
@@ -53,7 +67,6 @@ export default function FormWrapper() {
 			})
 
 		setFormData({ ...formData, ...inputValue })
-		setFormErrors({...formErrors, [e.target.name]: ''})
 	}
 
 	const handleUserData = () => {
@@ -63,13 +76,76 @@ export default function FormWrapper() {
 
 		if (errors) return setFormErrors(errors)
 
-		goToNextFormStep();
+		goToNextFormStep()
+	}
+
+	const handleProfileData = () => {
+		const profileData = formatProfileData(formData)
+
+		const errors = handleFormErrors(profileData)
+
+		if (errors) return setFormErrors(errors)
+
+		goToNextFormStep()
+	}
+
+	const handleAddressData = () => {
+		const addressData = formatAddressData(formData)
+
+		const errors = handleFormErrors(addressData)
+
+		if (errors) return setFormErrors(errors)
+	}
+
+	const handleCepChanges = async (e: ChangeEvent<HTMLInputElement>) => {
+		handleOnChangeEvent(e)
+
+		const zipCode = e.target.value
+
+		if (zipCode.length !== 9) return
+
+		try {
+			const viaCepResponse: ViaCep = await getCep(zipCode.replace('-', ''))
+
+			if (viaCepResponse.erro) throw new Error(ERROR_MESSAGES.zipCode.notExist)
+
+			if(viaCepResponse.uf !== "AM") throw new Error(ERROR_MESSAGES.zipCode.notAllowedState)
+
+			const {
+				cep,
+				logradouro: street,
+				complemento: complement,
+				bairro: neighborhood,
+				localidade: city,
+				uf: state,
+			} = viaCepResponse
+
+			setFormData({
+				...formData,
+				address: {
+					...formData.address,
+					zipCode: cep,
+					street,
+					complement,
+					neighborhood,
+					city,
+					state,
+				},
+			})
+		} catch (error: any) {
+			setFormErrors({ ...formErrors, zipCode: error.message })
+		}
 	}
 
 	const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
 		if (step === 1) return handleUserData()
+
+		if (step === 2) return handleProfileData()
+
+		handleAddressData()
+
 	}
 
 	return (
@@ -95,7 +171,8 @@ export default function FormWrapper() {
 							values={formData}
 							formErrors={formErrors}
 							onChange={handleOnChangeEvent}
-						/>{' '}
+							selectChange={handleSelectOnChange}
+						/>
 						<Button>Continuar</Button>
 						<Button variant type="button" onClick={backPreviousFormStep}>
 							Voltar
@@ -109,6 +186,7 @@ export default function FormWrapper() {
 							values={formData}
 							formErrors={formErrors}
 							onChange={handleOnChangeEvent}
+							cepOnChange={handleCepChanges}
 						/>{' '}
 						<Button>Registrar</Button>
 						<Button variant type="button" onClick={backPreviousFormStep}>

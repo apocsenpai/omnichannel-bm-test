@@ -5,15 +5,13 @@ import { ERROR_MESSAGES } from '@/utils/constants/errorsMessages'
 import {
 	alphaNumMatch,
 	cepMatch,
-	dateMatch,
 	emailMatch,
 	nameMatch,
 	numericMatch,
 	passwordMatch,
+	phoneMatch,
 } from '@/utils/regex'
 import isValidCpf from '@/utils/validators/validateCpf'
-import { getCep } from '@/services/cepApi'
-import { ViaCep } from '@/interfaces/viaCep'
 
 dayjs.extend(customParseFormat)
 
@@ -34,7 +32,8 @@ const errorsValidator: ErrorsValidator = {
 	name: (value: string) => validateName(value),
 	cpf: (value: string) => validateCpf(value),
 	birthday: (value: string) => validateBirthday(value),
-	gender: (value: string) => validateGender(value),
+	zipCode: (value: string) => validateZipCode(value),
+	phone: (value: string) => validatePhone(value),
 	number: (value: string) => validateNumber(value),
 }
 
@@ -99,29 +98,23 @@ function validateCpf(cpf: string) {
 }
 
 function validateBirthday(birthday: string) {
-	return !(
-		dateMatch.test(birthday) && dayjs(birthday, 'DD/MM/YYYY', true).isValid()
-	)
-		? ERROR_MESSAGES.birthday.invalidInput
+	const actualDate = dayjs(new Date())
+
+	const birthdayDate = dayjs(birthday, 'DD/MM/YYYY', true)
+
+	if (!birthdayDate.isValid()) return ERROR_MESSAGES.birthday.invalidInput
+
+	return actualDate.diff(birthdayDate, 'year', true) < 18
+		? ERROR_MESSAGES.birthday.notAllowedAge
 		: ''
 }
 
-function validateGender(gender: string) {
-	return ''
+function validatePhone(phone: string) {
+	return !phoneMatch.test(phone) ? ERROR_MESSAGES.phone.invalidInput : ''
 }
 
-async function validateZipCode(zipCode: string) {
-	if (!cepMatch.test(zipCode)) return ERROR_MESSAGES.zipCode.invalidInput
-
-	try {
-		const viaCepResponse: ViaCep = await getCep(zipCode.replace('-', ''))
-
-		if (viaCepResponse.erro) throw new Error(ERROR_MESSAGES.zipCode.notExist)
-
-		return ''
-	} catch (error: any) {
-		return error.message
-	}
+function validateZipCode(zipCode: string){
+	return !cepMatch.test(zipCode) ? ERROR_MESSAGES.zipCode.invalidInput : ''
 }
 
 function validateNumber(number: string) {

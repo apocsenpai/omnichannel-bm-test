@@ -12,7 +12,8 @@ export const formatProfileData = ({
 	cpf,
 	birthday,
 	gender,
-}: FormInputData) => ({ name, cpf, birthday, gender })
+	phone,
+}: FormInputData) => ({ name, cpf, birthday, gender, phone })
 
 export const formatAddressData = ({ address }: FormInputData) => ({
 	zipCode: address.zipCode,

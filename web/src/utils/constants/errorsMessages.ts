@@ -22,17 +22,21 @@ export const ERROR_MESSAGES: ErrosMessages = {
 		invalidInput: 'O nome deve conter apenas letras.'
 	},
 	cpf: {
-		invalidInput: 'O cpf deve conter apenas 11 números.'
+		invalidInput: 'Por favor, digite um CPF válido.'
 	},
 	birthday: {
-		invalidInput: 'Você deve ser maior de idade para acessar!'
+		invalidInput: 'Digite uma data válida',
+		notAllowedAge: 'Você deve ser maior de idade para acessar!'
 	},
 	gender: {
 		invalidInput: 'Selecione o gênero'
 	},
+	phone: {
+		invalidInput: 'Digite um telefone válido'
+	},
 	zipCode: {
 		invalidInput: 'CEP inválido.',
-		notAllowState: 'Apenas CEPs do Amazonas são válidos.',
+		notAllowedState: 'Apenas CEPs do Amazonas são válidos.',
 		notExist: 'CEP inexistente.'
 	},
 	number: {

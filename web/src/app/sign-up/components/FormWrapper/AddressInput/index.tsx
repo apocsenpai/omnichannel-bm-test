@@ -3,6 +3,7 @@ import { InputProps } from '@/interfaces/form'
 
 export default function AddressInput({
 	onChange,
+	cepOnChange,
 	values,
 	formErrors,
 }: InputProps) {
@@ -11,8 +12,9 @@ export default function AddressInput({
 			<div className="grid sm:grid-cols-2 gap-2">
 				<Input
 					type="text"
-					onChange={onChange}
-					value={values.username}
+					onChange={cepOnChange}
+					value={values.address.zipCode}
+					error={formErrors?.zipCode}
 					name="zipCode"
 					placeholder="Digite seu CEP"
 					label="CEP"
@@ -20,7 +22,8 @@ export default function AddressInput({
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.address.city}
+					error={formErrors?.city}
 					name="city"
 					placeholder="Cidade"
 					label="Cidade"
@@ -31,7 +34,8 @@ export default function AddressInput({
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.address.state}
+					error={formErrors?.state}
 					name="state"
 					placeholder="Estado"
 					label="Estado"
@@ -40,7 +44,8 @@ export default function AddressInput({
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.address.neighborhood}
+					error={formErrors?.neighborhood}
 					name="neighborhood"
 					placeholder="Bairro"
 					label="Bairro"
@@ -50,7 +55,8 @@ export default function AddressInput({
 			<Input
 				type="text"
 				onChange={onChange}
-				value={values.username}
+				value={values.address.street}
+				error={formErrors?.street}
 				name="street"
 				placeholder="Rua"
 				label="Rua"
@@ -60,17 +66,19 @@ export default function AddressInput({
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.address.number}
+					error={formErrors?.number}
 					name="number"
-					placeholder="Digite o número da casa"
+					placeholder="Número"
 					label="Número"
 				/>
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.address.complement}
+					error={formErrors?.complement}
 					name="complement"
-					placeholder="Digite o complemento"
+					placeholder="Complemento"
 					label="Complemento"
 				/>
 			</div>
