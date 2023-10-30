@@ -19,9 +19,11 @@ import { getCep } from '@/services/cepApi'
 import { ERROR_MESSAGES } from '@/utils/constants/errorsMessages'
 import { ViaCep } from '@/interfaces/viaCep'
 import { createUser } from '@/services/userApi'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function FormWrapper() {
+	const router = useRouter()
+
 	const [step, setStep] = useState<number>(1)
 
 	const [formData, setFormData] = useState<FormInputData>({
@@ -157,7 +159,7 @@ export default function FormWrapper() {
 		try {
 			await createUser(formatForm(formData))
 
-			redirect('/sign-up/success')
+			router.push('/sign-up/success')
 		} catch (error: any) {
 			console.log(error)
 		}
