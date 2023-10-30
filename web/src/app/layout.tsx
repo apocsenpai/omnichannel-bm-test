@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt">
-      <body className={`${play.className} font-sans`}>{children}</body>
+      <body className={`${play.variable} font-sans`}>{children}</body>
     </html>
   );
 }
