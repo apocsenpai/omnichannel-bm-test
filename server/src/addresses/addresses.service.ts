@@ -7,9 +7,11 @@ export class AddressesService {
   constructor(private readonly httpService: HttpService) {}
 
   async throwIfCepIsNotValid(zipCode: string) {
+    const zipCodeFormatted = zipCode.replace('-', '');
+
     const data = (
       await this.httpService.axiosRef.get(
-        `https://viacep.com.br/ws/${zipCode}/json/`,
+        `https://viacep.com.br/ws/${zipCodeFormatted}/json/`,
       )
     ).data as ViaCep;
 

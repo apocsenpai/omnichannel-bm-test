@@ -28,6 +28,7 @@ export class UsersService {
 
     const createBody = {
       ...data,
+      cpf: data.cpf.replace('.', '').replace('-', ''),
       birthday: birthdayIso,
       password: this.encryptPassword(data.password),
     };

@@ -20,7 +20,7 @@ export class CreateAddressDto implements Address {
 
   @IsNumberString()
   @IsNotEmpty({ message: 'O campo CEP é obrigatório!' })
-  @Length(8, 8, { message: 'O campo CEP deve ter 8 caracteres numéricos.' })
+  @Length(8, 9, { message: 'O campo CEP deve ter 9 caracteres numéricos.' })
   zipCode: string;
 
   @IsString({ message: 'O campo Complemento não possui caracteres válidos!' })

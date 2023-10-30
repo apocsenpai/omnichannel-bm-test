@@ -49,7 +49,7 @@ export class CreateUserDto {
 
   @IsNumberString({}, { message: 'O campo CPF deve possuir apenas números!' })
   @IsNotEmpty({ message: 'O campo CPF é obrigatório!' })
-  @Length(11, 11, { message: 'O campo CPF deve ter 11 caracteres numéricos.' })
+  @Length(11, 14, { message: 'O campo CPF deve ter 11 caracteres numéricos.' })
   cpf: string;
 
   @IsDateString(
