@@ -1,22 +1,18 @@
 import Input from '@/components/Input'
-import { FormInputData } from '@/interfaces/form';
-import { ChangeEventHandler } from 'react';
-
-interface UserInputProps {
-	onChange: ChangeEventHandler<HTMLInputElement>;
-	values: FormInputData;
-}
+import { InputProps } from '@/interfaces/form'
 
 export default function UserInput({
 	onChange,
 	values,
-}: UserInputProps) {
+	formErrors,
+}: InputProps) {
 	return (
 		<>
 			<Input
 				type="text"
 				onChange={onChange}
 				value={values.username}
+				error={formErrors?.username}
 				name="username"
 				placeholder="Digite seu apelido :P"
 				label="Nome de usuário"
@@ -25,6 +21,7 @@ export default function UserInput({
 				type="text"
 				onChange={onChange}
 				value={values.email}
+				error={formErrors?.email}
 				name="email"
 				placeholder="Digite seu email"
 				label="Email"
@@ -33,6 +30,7 @@ export default function UserInput({
 				type="password"
 				onChange={onChange}
 				value={values.password}
+				error={formErrors?.password}
 				name="password"
 				placeholder="Digite sua senha"
 				label="Senha"
@@ -41,6 +39,7 @@ export default function UserInput({
 				type="password"
 				onChange={onChange}
 				value={values.confirmedPassword}
+				error={formErrors?.confirmedPassword}
 				name="confirmedPassword"
 				placeholder="Confirme sua senha"
 				label="Confirmação de senha"

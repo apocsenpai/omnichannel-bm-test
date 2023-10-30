@@ -7,6 +7,8 @@ import UserInput from './UserInput'
 import Button from '@/components/Button'
 import { FormInputData } from '@/interfaces/form'
 import AddressInput from './AddressInput'
+import { handleFormErrors } from '@/helpers/handleFormErrors'
+import { formatUserData } from '@/helpers/formatters'
 
 export default function FormWrapper() {
 	const [step, setStep] = useState<number>(1)
@@ -31,9 +33,12 @@ export default function FormWrapper() {
 		},
 	})
 
-	const [formErrors, setFormErrors] = useState<FormInputData>()
+	console.log(formData)
+
+	const [formErrors, setFormErrors] = useState<{ [key: string]: string } >()
 
 	const goToNextFormStep = () => setStep(step === 3 ? step : step + 1)
+
 	const backPreviousFormStep = () => setStep(step === 1 ? step : step - 1)
 
 	const handleOnChangeEvent = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,12 +53,23 @@ export default function FormWrapper() {
 			})
 
 		setFormData({ ...formData, ...inputValue })
+		setFormErrors({...formErrors, [e.target.name]: ''})
+	}
+
+	const handleUserData = () => {
+		const userData = formatUserData(formData)
+
+		const errors = handleFormErrors(userData)
+
+		if (errors) return setFormErrors(errors)
+
+		goToNextFormStep();
 	}
 
 	const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
-		 goToNextFormStep()
+		if (step === 1) return handleUserData()
 	}
 
 	return (
@@ -65,23 +81,39 @@ export default function FormWrapper() {
 			>
 				{step === 1 && (
 					<>
-						<UserInput values={formData} onChange={handleOnChangeEvent} />
+						<UserInput
+							values={formData}
+							formErrors={formErrors}
+							onChange={handleOnChangeEvent}
+						/>
 						<Button>Continuar</Button>
 					</>
 				)}
 				{step === 2 && (
 					<>
-						<ProfileInput values={formData} onChange={handleOnChangeEvent} />{' '}
+						<ProfileInput
+							values={formData}
+							formErrors={formErrors}
+							onChange={handleOnChangeEvent}
+						/>{' '}
 						<Button>Continuar</Button>
-						<Button variant type='button' onClick={backPreviousFormStep}>Voltar</Button>
+						<Button variant type="button" onClick={backPreviousFormStep}>
+							Voltar
+						</Button>
 					</>
 				)}
 
 				{step === 3 && (
 					<>
-						<AddressInput values={formData} onChange={handleOnChangeEvent} />{' '}
+						<AddressInput
+							values={formData}
+							formErrors={formErrors}
+							onChange={handleOnChangeEvent}
+						/>{' '}
 						<Button>Registrar</Button>
-						<Button variant type='button' onClick={backPreviousFormStep}>Voltar</Button>
+						<Button variant type="button" onClick={backPreviousFormStep}>
+							Voltar
+						</Button>
 					</>
 				)}
 			</form>

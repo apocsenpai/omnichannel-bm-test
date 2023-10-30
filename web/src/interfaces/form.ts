@@ -1,3 +1,5 @@
+import { ChangeEventHandler } from "react";
+
 export interface FormInputData {
 	[key: string]: string | Address;
 	username: string;
@@ -11,8 +13,8 @@ export interface FormInputData {
 	address: Address;
 }
 
-interface Address {
-    [key: string]: string | undefined;
+export interface Address {
+	[key: string]: string | undefined;
 	zipCode: string;
 	street: string;
 	number: string;
@@ -20,4 +22,10 @@ interface Address {
 	neighborhood: string;
 	city: string;
 	state: string;
+}
+
+export interface InputProps {
+	onChange: ChangeEventHandler<HTMLInputElement>;
+	values: FormInputData;
+	formErrors: { [key: string]: string } | undefined;
 }

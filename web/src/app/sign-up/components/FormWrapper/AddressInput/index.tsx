@@ -1,13 +1,11 @@
 import Input from '@/components/Input'
-import { FormInputData } from '@/interfaces/form'
-import { ChangeEventHandler } from 'react'
+import { InputProps } from '@/interfaces/form'
 
-interface AddressInputProps {
-	onChange: ChangeEventHandler<HTMLInputElement>;
-	values: FormInputData;
-}
-
-export default function AddressInput({ onChange, values }: AddressInputProps) {
+export default function AddressInput({
+	onChange,
+	values,
+	formErrors,
+}: InputProps) {
 	return (
 		<>
 			<div className="grid sm:grid-cols-2 gap-2">
@@ -72,7 +70,7 @@ export default function AddressInput({ onChange, values }: AddressInputProps) {
 					onChange={onChange}
 					value={values.username}
 					name="complement"
-					placeholder="Digite o complemente"
+					placeholder="Digite o complemento"
 					label="Complemento"
 				/>
 			</div>

@@ -1,19 +1,17 @@
 import Input from '@/components/Input'
-import { FormInputData } from '@/interfaces/form'
-import { ChangeEventHandler } from 'react'
+import { InputProps } from '@/interfaces/form'
 
-interface ProfileInputProps {
-	onChange: ChangeEventHandler<HTMLInputElement>;
-	values: FormInputData;
-}
-
-export default function ProfileInput({ onChange, values }: ProfileInputProps) {
+export default function ProfileInput({
+	onChange,
+	values,
+	formErrors,
+}: InputProps) {
 	return (
 		<>
 			<Input
 				type="text"
 				onChange={onChange}
-				value={values.username}
+				value={values.name}
 				name="name"
 				placeholder="Como você se chama?"
 				label="Nome completo"
@@ -21,7 +19,7 @@ export default function ProfileInput({ onChange, values }: ProfileInputProps) {
 			<Input
 				type="text"
 				onChange={onChange}
-				value={values.username}
+				value={values.cpf}
 				name="cpf"
 				placeholder="Digite seu CPF"
 				label="CPF"
@@ -30,7 +28,7 @@ export default function ProfileInput({ onChange, values }: ProfileInputProps) {
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.birthday}
 					name="birthday"
 					placeholder="Quando você nasceu?"
 					label="Data de nascimento"
@@ -38,7 +36,7 @@ export default function ProfileInput({ onChange, values }: ProfileInputProps) {
 				<Input
 					type="text"
 					onChange={onChange}
-					value={values.username}
+					value={values.gender}
 					name="gender"
 					placeholder="LEMBRA DE COLOCAR O SELECT"
 					label="Gênero"
