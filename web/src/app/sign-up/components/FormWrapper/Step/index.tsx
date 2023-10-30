@@ -1,3 +1,4 @@
+import { LucideCheck } from "lucide-react";
 interface StepProps {
 	step: number;
 }
@@ -14,7 +15,7 @@ export default function Step({ step }: StepProps) {
 				<span
 					className={`flex w-full h-full justify-center items-center rounded-full bg-primary text-white`}
 				>
-					1
+					{step > 1 ? <LucideCheck/> : '1' }
 				</span>
 				{step === 1 && (
 					<span className="absolute top-16 text-center text-base w-40 text-primary">
@@ -41,7 +42,7 @@ export default function Step({ step }: StepProps) {
 						step < 2 ? 'text-primary' : 'text-white bg-primary'
 					}`}
 				>
-					2
+					{step > 2 ? <LucideCheck/> : '2' }
 				</span>
 				{step === 2 && (
 					<span className="absolute top-16 text-center text-base w-40 text-primary">

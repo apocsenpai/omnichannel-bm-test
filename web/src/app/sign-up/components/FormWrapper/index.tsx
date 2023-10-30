@@ -8,11 +8,17 @@ import Button from '@/components/Button'
 import { FormInputData } from '@/interfaces/form'
 import AddressInput from './AddressInput'
 import { handleFormErrors } from '@/helpers/handleFormErrors'
-import { formatAddressData, formatProfileData, formatUserData } from '@/helpers/formatters'
+import {
+	formatAddressData,
+	formatProfileData,
+	formatUserData,
+} from '@/helpers/formatters'
 import normalize from '@/utils/validators/normalizeMasks'
 import { getCep } from '@/services/cepApi'
 import { ERROR_MESSAGES } from '@/utils/constants/errorsMessages'
 import { ViaCep } from '@/interfaces/viaCep'
+import { createUser } from '@/services/userApi'
+import { redirect } from 'next/navigation'
 
 export default function FormWrapper() {
 	const [step, setStep] = useState<number>(1)
@@ -109,7 +115,8 @@ export default function FormWrapper() {
 
 			if (viaCepResponse.erro) throw new Error(ERROR_MESSAGES.zipCode.notExist)
 
-			if(viaCepResponse.uf !== "AM") throw new Error(ERROR_MESSAGES.zipCode.notAllowedState)
+			if (viaCepResponse.uf !== 'AM')
+				throw new Error(ERROR_MESSAGES.zipCode.notAllowedState)
 
 			const {
 				cep,
@@ -137,7 +144,7 @@ export default function FormWrapper() {
 		}
 	}
 
-	const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
 		if (step === 1) return handleUserData()
@@ -146,6 +153,13 @@ export default function FormWrapper() {
 
 		handleAddressData()
 
+		try {
+			await createUser(formData)
+			
+			redirect('/sign-up/success')
+		} catch (error: any) {
+			console.log(error)
+		}
 	}
 
 	return (
