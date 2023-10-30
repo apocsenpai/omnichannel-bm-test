@@ -4,7 +4,7 @@ import FormWrapper from './FormWrapper'
 
 export default function RightSide() {
 	return (
-		<aside className="flex flex-col justify-center items-center p-6 sm:p-20 md:p-40 lg:p-8 xl:p-16">
+		<aside className="flex flex-col items-center p-6 sm:p-20 md:p-40 lg:p-8 xl:p-16">
 			<Image
 				src={beDigitalLogo}
 				alt="Logo Bemol Digital"
