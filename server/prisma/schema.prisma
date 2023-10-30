@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   username  String   @unique
   email     String   @unique
   password  String
@@ -23,22 +23,23 @@ model User {
 }
 
 model Profile {
-  id        Int    @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
   cpf       String    @unique @db.VarChar(11)
   birthday  DateTime  @db.Date
   gender    Gender
+  phone     String
   addresses Address[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
   user      User      @relation(fields: [userId], references: [id])
-  userId    Int    @unique
+  userId    Int       @unique
 
   @@map("profiles")
 }
 
 model Address {
-  id             Int       @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   street         String       @db.VarChar(50)
   number         String       @db.VarChar(6)
   complement     String?      @db.VarChar(50)
@@ -54,7 +55,7 @@ model Address {
 }
 
 model Neighborhood {
-  id        Int    @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(50)
   createdAt DateTime  @default(now())
   addresses Address[]
@@ -65,7 +66,7 @@ model Neighborhood {
 }
 
 model City {
-  id            Int         @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   name          String         @db.VarChar(50)
   createdAt     DateTime       @default(now())
   neighborhoods Neighborhood[]
@@ -76,7 +77,7 @@ model City {
 }
 
 model State {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(50)
   createdAt DateTime @default(now())
   cities    City[]

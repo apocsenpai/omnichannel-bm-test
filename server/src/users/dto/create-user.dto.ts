@@ -62,6 +62,10 @@ export class CreateUserDto {
   @IsEnum(Gender, { message: 'Opção selecionada não está disponível!' })
   gender: Gender;
 
+  @IsNumberString()
+  @IsNotEmpty({ message: 'O campo Celular é obrigatório!' })
+  phone: string;
+
   @ValidateNested()
   @Type(() => CreateAddressDto)
   address: CreateAddressDto;

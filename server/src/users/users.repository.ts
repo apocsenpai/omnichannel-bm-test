@@ -7,8 +7,17 @@ export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserDto) {
-    const { username, email, password, name, cpf, birthday, gender, address } =
-      data;
+    const {
+      username,
+      email,
+      password,
+      name,
+      cpf,
+      birthday,
+      gender,
+      phone,
+      address,
+    } = data;
 
     const { street, number, zipCode, complement, neighborhood, city, state } =
       address;
@@ -23,6 +32,7 @@ export class UsersRepository {
             name,
             cpf,
             birthday,
+            phone,
             gender,
             addresses: {
               create: {
