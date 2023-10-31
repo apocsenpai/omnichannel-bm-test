@@ -118,6 +118,8 @@ $ cd omnichannel-bm-test
         
 # Run docker compose in omnichannel-bm-test directory
 $ docker compose up -d
+
+# access http://localhost:3000
 ```
 ###### /server/.env.development or ./server/.env (local)
   ```
