@@ -18,7 +18,6 @@
   <a href="#about">About</a> •
   <a href="#stacks">Stacks</a> •
   <a href="#requirements">Requirements</a> •
-  <a href="#how-to-use">How To Use</a> •
   <a href="#license">License</a> •
   <a href="#contact-me">Contact me</a>
 </p>
@@ -28,7 +27,7 @@
 
 ## About
 
-This app is a technical test carried out for a software engineer position at Bemol Digital.
+This app is a technical test carried out for a software engineer position at [Bemol Digital](https://www.linkedin.com/company/bemoldigital/).
 
 ## Stacks
 
