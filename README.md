@@ -49,7 +49,7 @@ This app is a technical test carried out for a software engineer position at Bem
 
 ## Requirements
 
-To clone and run this application, you'll need [Git](https://git-scm.com) and [Docker engine](https://docs.docker.com/engine/install/).
+Withou docker, you need installing [Git](https://git-scm.com) , [Node 20.9.0 - LTS and npm](https://nodejs.org/en) and [Postgres](https://www.postgresql.org/download/)
 
 ```bash
 # Clone this repository
@@ -58,10 +58,82 @@ $ git clone https://github.com/apocsenpai/omnichannel-bm-test
 # Go into the directory
 $ cd omnichannel-bm-test
 
-# Run docker compose
-$ docker compose up -d
+# Open two terminals inside /omnichannel-bm-test directory
+```
+##### First terminal - backend
+```bash
+# Inside /omnichannel-bm-test directory
+$ cd server
+
+# Install packages
+$ npm i
+
+# Configure envs (See bellow)
+
+# Start
+$ npm run start:dev
+
+#Now go to the second terminal
 ```
 
+##### Second terminal - frontend
+```bash
+# Inside /omnichannel-bm-test directory
+$ cd web
+
+# Install packages
+$ npm i
+
+# Configure envs (See bellow)
+
+# Start
+$ npm run dev
+
+#Access link shown at console - default is http://localhost:3000/ 
+```
+
+##### Second terminal - front
+```bash
+# Inside /omnichannel-bm-test directory
+$ cd web
+
+# Install packages
+$ npm i
+
+# Configure envs (See bellow)
+
+# Start
+$ npm run dev
+```
+Or if you had [Docker engine](https://docs.docker.com/engine/install/) installed, try: 
+
+```bash
+# Clone this repository
+$ git clone https://github.com/apocsenpai/omnichannel-bm-test
+
+# Go into the directory
+$ cd omnichannel-bm-test
+
+# Create .env.development files in /web and /server directory - See below
+        
+# Run docker compose in omnichannel-bm-test directory
+$ docker compose up -d
+```
+###### /server/.env.development or ./server/.env (local)
+  ```
+      POSTGRES_USERNAME={yourUserPostgres}
+      POSTGRES_PASSWORD={yourPostgresPasswor - default is root}
+      POSTGRES_HOST={postgresHost - postgres container name}
+      POSTGRES_PORT={port}
+      POSTGRES_DATABASE={db_name}
+
+      #replace below
+      DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
+  ```
+###### /web/.env.development or  ./web/.env.local (local)
+  ```
+      NEXT_PUBLIC_API_BASE_URL=http://localhost:8888
+  ```
 ## License
 
 [Mozilla Public License 2.0](https://github.com/apocsenpai/Salve/blob/main/LICENSE)
