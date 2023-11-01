@@ -101,6 +101,9 @@ $ npm i
 
 # Configure envs (See bellow)
 
+# run migrations
+$ npx prisma migrate dev
+
 # Start
 $ npm run dev
 ```
@@ -114,7 +117,7 @@ $ git clone https://github.com/apocsenpai/omnichannel-bm-test
 $ cd omnichannel-bm-test
 
 # Create .env.development files in /web and /server directory - See below
-        
+
 # Run docker compose in omnichannel-bm-test directory
 $ docker compose up -d
 
@@ -122,18 +125,27 @@ $ docker compose up -d
 ```
 ###### /server/.env.development or ./server/.env (local)
   ```
-      POSTGRES_USERNAME={yourUserPostgres}
-      POSTGRES_PASSWORD={yourPostgresPasswor - default is root}
-      POSTGRES_HOST={postgresHost - postgres container name}
-      POSTGRES_PORT={port}
-      POSTGRES_DATABASE={db_name}
+    #.env.development (run with docker)
+      POSTGRES_USERNAME=postgres
+      POSTGRES_PASSWORD=root
+      POSTGRES_HOST=postgres
+      POSTGRES_PORT=5432
+      POSTGRES_DATABASE=omni_db
 
-      #replace below
-      DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
+   #.env (with npm)
+      POSTGRES_USERNAME={yourPostgreUser}
+      POSTGRES_PASSWORD={yourPostgrePassword - 'root' is default}
+      POSTGRES_HOST=localhost
+      POSTGRES_PORT=5432
+      POSTGRES_DATABASE=omni_db
+
+
+    # for both, just replace variables below  
+    DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
   ```
 ###### /web/.env.development or  ./web/.env.local (local)
-  ```
-      NEXT_PUBLIC_API_BASE_URL=http://localhost:8888
+  ```  
+      NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
   ```
 ## License
 
