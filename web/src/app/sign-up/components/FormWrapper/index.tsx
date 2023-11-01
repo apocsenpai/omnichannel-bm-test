@@ -20,6 +20,7 @@ import { ERROR_MESSAGES } from '@/utils/constants/errorsMessages'
 import { ViaCep } from '@/interfaces/viaCep'
 import { createUser } from '@/services/userApi'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 export default function FormWrapper() {
 	const router = useRouter()
@@ -160,8 +161,12 @@ export default function FormWrapper() {
 			await createUser(formatForm(formData))
 
 			router.push('/sign-up/success')
-		} catch (error: any) {
-			console.log(error)
+		} catch (error) {
+
+			// @ts-ignore
+			const errorMessage = (error?.response.data.message || error?.response.data.message[0]) as string;
+
+			toast.error(errorMessage)
 		}
 	}
 
@@ -191,7 +196,7 @@ export default function FormWrapper() {
 							selectChange={handleSelectOnChange}
 						/>
 						<Button>Continuar</Button>
-						<Button variant type="button" onClick={backPreviousFormStep}>
+						<Button variant={true} type="button" onClick={backPreviousFormStep}>
 							Voltar
 						</Button>
 					</>
@@ -206,7 +211,7 @@ export default function FormWrapper() {
 							cepOnChange={handleCepChanges}
 						/>{' '}
 						<Button>Registrar</Button>
-						<Button variant type="button" onClick={backPreviousFormStep}>
+						<Button variant={true} type="button" onClick={backPreviousFormStep}>
 							Voltar
 						</Button>
 					</>
