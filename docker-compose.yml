@@ -32,5 +32,14 @@ services:
       - ./web/src:/app/src
       - ./web/public:/app/public
 
+  nginx:
+    build: ./nginx
+    ports:
+      - 8080:80
+    depends_on:
+      - postgres
+      - api
+      - next-app
+
 volumes:
   postgres-volume:
