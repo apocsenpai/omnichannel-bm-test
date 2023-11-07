@@ -32,6 +32,7 @@ const errorsValidator: ErrorsValidator = {
 	name: (value: string) => validateName(value),
 	cpf: (value: string) => validateCpf(value),
 	birthday: (value: string) => validateBirthday(value),
+	gender: (value: string) => validateGender(value),
 	zipCode: (value: string) => validateZipCode(value),
 	phone: (value: string) => validatePhone(value),
 	number: (value: string) => validateNumber(value),
@@ -107,6 +108,10 @@ function validateBirthday(birthday: string) {
 	return actualDate.diff(birthdayDate, 'year', true) < 18
 		? ERROR_MESSAGES.birthday.notAllowedAge
 		: ''
+}
+
+function validateGender(gender: string) {
+	return !(gender === 'M' || gender === 'F' || gender === 'NB' || gender === 'NI') ? ERROR_MESSAGES.gender.invalidInput : ''
 }
 
 function validatePhone(phone: string) {

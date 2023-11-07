@@ -16,8 +16,9 @@ export const formatProfileData = ({
 	name,
 	cpf,
 	birthday,
+	gender,
 	phone,
-}: FormInputData) => ({ name, cpf, birthday, phone })
+}: FormInputData) => ({ name, cpf, birthday, phone, gender })
 
 export const formatAddressData = ({ address }: FormInputData) => ({
 	zipCode: address.zipCode,
@@ -29,7 +30,7 @@ export const formatForm = (formData: FormInputData) => {
 		...formData,
 		cpf: formData.cpf.replace(/\D/g,''),
 		birthday: dayjs(formData.birthday, 'DD/MM/YYYY', true).toDate(),
-		phone: formData.cpf.replace(/\D/g,''),
+		phone: formData.phone.replace(/\D/g,''),
 		address: {
 			...formData.address,
 			zipCode: formData.address.zipCode.replace(/\D/g,''),

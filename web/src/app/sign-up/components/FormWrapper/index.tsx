@@ -157,7 +157,8 @@ export default function FormWrapper() {
 
 		handleAddressData()
 
-		try {
+		console.log(formatForm(formData))
+	 try {
 			await createUser(formatForm(formData))
 
 			router.push('/sign-up/success')
@@ -196,7 +197,7 @@ export default function FormWrapper() {
 							selectChange={handleSelectOnChange}
 						/>
 						<Button>Continuar</Button>
-						<Button variant={true} type="button" onClick={backPreviousFormStep}>
+						<Button variant type="button" onClick={backPreviousFormStep}>
 							Voltar
 						</Button>
 					</>
@@ -211,7 +212,7 @@ export default function FormWrapper() {
 							cepOnChange={handleCepChanges}
 						/>{' '}
 						<Button>Registrar</Button>
-						<Button variant={true} type="button" onClick={backPreviousFormStep}>
+						<Button variant type="button" onClick={backPreviousFormStep}>
 							Voltar
 						</Button>
 					</>

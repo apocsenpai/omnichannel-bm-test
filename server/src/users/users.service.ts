@@ -33,7 +33,7 @@ export class UsersService {
       password: this.encryptPassword(data.password),
     };
 
-    await this.userRepository.create(createBody);
+    return await this.userRepository.create(createBody);
   }
 
   encryptPassword(password: string) {
